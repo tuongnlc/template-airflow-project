@@ -1,0 +1,20 @@
+---
+kind: DagDefinition
+metadata:
+  name: example_1
+spec:
+  dag_id: example_1
+  schedule: "0 0 * * *"
+  start_date: 2023-01-01
+  catchup: False
+  default_args:
+    owner: tuongnguyen
+    retries: 5
+    on_failure_callback: []
+  tags: ["example_1"]
+  task_factories:
+    - id: job
+      factory_type: JobTaskFactory
+      args:
+        job_config: ...
+        cluster_type: "example1"
