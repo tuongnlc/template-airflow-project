@@ -36,9 +36,9 @@ class SingletonDagFactory:
         
         dag = self._create_dag_instance(spec)
         task_map = self._create_tasks(dag, spec.task_factories)
-        # self._setup_dependencies(task_map)
+        self._setup_dependencies(task_map, spec.task_factories)
 
-    
+        return dag
 
     def _create_dag_instance(self, spec: DagDefinitionSpec) -> DAG:
         """
@@ -109,7 +109,7 @@ class SingletonDagFactory:
 
             try:
                 factory = self.task_factory_registry.get(factory_type)
-                task_group = factory.create_task_group(
+                task_group = factory.create_task(
                     task_group_id=task_group_id,
                     dag=dag,
                     args=task_config.args
@@ -137,5 +137,3 @@ class SingletonDagFactory:
                 
                 task_group.set_upstream(task_map[dependency_id])
                 logger.debug(f"Set upstream dependency: {dependency_id} for task group: {task_group_id}")
-
-
